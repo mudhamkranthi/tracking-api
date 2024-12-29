@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.test.tracking.TrackingApiApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.780 s -- in com.test.tracking.TrackingApiApplicationTests
