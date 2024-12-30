@@ -13,24 +13,38 @@ public class TrackingNumberService {
 	private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 	private static final int TRACKING_NUMBER_LENGTH = 16; // Maximum length for tracking number
 
-	public String generateUniqueTrackingNumber() {
+	public String generateUniqueTrackingNumber(String origin_country_id, String destination_country_id, String weight,
+			String created_at, String customer_id, String customer_name, String customer_slug) {
 		String trackingNumber;
 
 		do {
-			trackingNumber = generateTrackingNumber();
+			trackingNumber = generateTrackingNumber(origin_country_id, destination_country_id, weight, created_at,
+					customer_id, customer_name, customer_slug);
 		} while (!isUnique(trackingNumber)); // Ensure uniqueness
 
 		return trackingNumber;
 	}
 
-	private static String generateTrackingNumber() {
+	private static String generateTrackingNumber(String origin_country_id, String destination_country_id, String weight,
+			String created_at, String customer_id, String customer_name, String customer_slug) {
 		StringBuilder trackingNumber = new StringBuilder();
+
+		String parameters = origin_country_id + destination_country_id + weight + created_at + customer_id
+				+ customer_name + customer_slug;
+
 		String timestamp = new SimpleDateFormat("ddHHmmss").format(System.currentTimeMillis());
 		long milliseconds = System.currentTimeMillis() % 1000;
 		trackingNumber.append(timestamp).append(String.format("%03d", milliseconds));
 
-		String randomPart = generateRandomString(TRACKING_NUMBER_LENGTH - trackingNumber.length());
-		trackingNumber.append(randomPart);
+		String paramHash = Integer.toHexString(parameters.hashCode()).toUpperCase();
+		trackingNumber.append(paramHash);
+
+		if (trackingNumber.length() > TRACKING_NUMBER_LENGTH) {
+			trackingNumber.setLength(TRACKING_NUMBER_LENGTH);
+		} else if (trackingNumber.length() < TRACKING_NUMBER_LENGTH) {
+			String randomPart = generateRandomString(TRACKING_NUMBER_LENGTH - trackingNumber.length());
+			trackingNumber.append(randomPart);
+		}
 
 		return trackingNumber.toString();
 	}

@@ -37,7 +37,8 @@ public class TrackingNumberController {
 		}
 
 		// Generate unique tracking number
-		String trackingNumber = trackingNumberService.generateUniqueTrackingNumber();
+		String trackingNumber = trackingNumberService.generateUniqueTrackingNumber(origin_country_id, destination_country_id, weight, 
+                created_at, customer_id, customer_name, customer_slug);
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX");
 		String formattedTimestamp = OffsetDateTime.now().format(formatter);
